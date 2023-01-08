@@ -3,4 +3,11 @@
 /blog-backcode/myblog/target/
 /blog-backcode/myblog/src/main/resources/application.yml
 
+#vscode Editor
+/blog-front/admin/.vscode/
+/blog-front/admin/node_modules/
+/blog-front/admin/package-lock.json
+/blog-front/blog/.vscode/
+/blog-front/blog/node_modules/
+/blog-front/blog/package-lock.json
 
