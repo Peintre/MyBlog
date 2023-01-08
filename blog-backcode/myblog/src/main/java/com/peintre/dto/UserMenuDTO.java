@@ -1,0 +1,57 @@
+package com.peintre.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+/**
+ * 用户菜单
+ *
+ * @author Peintre
+ * @date 2021/08/01
+ */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class
+UserMenuDTO {
+
+    /**
+     * 菜单名
+     */
+    private String name;
+
+    /**
+     * 路径
+     */
+    private String path;
+
+    /**
+     * 组件
+     */
+    private String component;
+
+    /**
+     * icon
+     */
+    private String icon;
+
+    /**
+     * 是否隐藏
+     */
+    private Boolean hidden;
+
+    /**
+     * 父菜单名称
+     */
+    private String parentName;
+
+    /**
+     * 子菜单组
+     */
+    private List<UserMenuDTO> childMenuList;
+}
