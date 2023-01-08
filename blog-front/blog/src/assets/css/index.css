@@ -1,0 +1,232 @@
+/* 全局设置 */
+* {
+    font-family: Consolas, 微软雅黑;
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+    text-decoration: none;
+}
+.layout{
+  background: linear-gradient(26deg,rgba(247,149,51,.1),rgba(243,112,85,.1) 15%,rgba(239,78,123,.1) 30%,rgba(161,102,171,.1) 44%,rgba(80,115,184,.1) 58%,rgba(16,152,173,.1) 72%,rgba(7,179,155,.1) 86%,rgba(109,186,130,.1));
+}
+.my-main{
+    padding-top: 60px;
+}
+.my-t-5{
+    margin-top: 20px!important;
+}
+.my-ml-1{
+  margin-left: 10px!important;
+}
+.my-mr-1{
+  margin-right: 10px!important;
+}
+.float-left{
+    float: left!important;
+}
+.float-right{
+    float: right!important;
+}
+.pointer{
+  cursor: pointer;
+}
+.unselect{
+  user-select: none;
+}
+.flex{
+  display: flex;
+}
+.block{
+  display: block;
+}
+/* 显示动画*/
+.zoomIn {
+    animation-name: zoomIn;
+}
+.animated {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+@keyframes zoomIn{
+    0%{
+      opacity: 0;
+      transform: scale3d(.3,.3,.3);
+    }
+    50%{
+      opacity: 1;
+    }
+}
+@keyframes main{
+    0% {
+      opacity: 0;
+      filter: alpha(opacity=0);
+      transform: translateY(50px);
+    }
+    100% {
+      opacity: 1;
+      filter: none;
+      transform: translateY(0);
+    }
+  }
+/* element-plus样式修改 */
+.el-message{
+  z-index: 9999 !important;
+}
+.my-card-article .el-card__body{
+  display:flex; 
+  padding:0; 
+  height:100%; 
+  align-items:center; 
+  width:100%;
+}
+.el-card{
+  border-radius: 12px 8px 8px 12px !important;
+  border: none !important;
+}
+.my-sider .el-drawer{
+  background: #f6f8fa;
+}
+.my-sider .el-drawer__body{
+  padding: 0;
+}
+.my-main .card-content .el-card__body,
+.my-main .my-main-content .el-card__body,
+.my-main .articleList-card-content .el-card__body{
+    padding: 0;
+    height:100%; 
+    width:100%;
+}
+.my-main .articleList-card-content .el-divider--horizontal {
+  margin: 0;
+}
+.my-model .el-dialog__header,
+.my-model .el-dialog__body{
+  padding:0;
+  padding-bottom:0;
+}
+.my-model .el-dialog{
+  border-radius:4px;
+  background-color:rgba(220,38,38,0.2);
+}
+.my-model .el-card{
+  border-radius: 4px !important;
+}
+/*适应PC端 宽度大于768px*/
+@media screen and (min-width: 768px) {
+    .my-main .card-content{
+        animation: main 1s;
+        max-width: 970px;
+        padding: 50px 40px;
+        margin: 380px auto 40px auto
+    }
+    .my-main .my-main-content{
+        max-width: 1200px;
+        margin: 374.5px auto 40px auto!important;
+        padding: 20px 5px 0px 5px;
+    }
+}
+/*适应移动端 宽度小于767px*/
+@media screen and (max-width: 767px){
+    .my-card-article .el-card__body{
+        flex-direction: column;
+    }
+    .my-main .card-content{
+        animation: main 1s;
+        margin: 240px 5px 20px 5px;
+        padding: 36px 14px;
+    }
+    .my-main .my-main-content{
+        width: 100%;
+        margin: calc(100vh - 66px) auto 0 auto !important;
+        padding: 20px 5px 0px 5px;
+    }
+  
+
+}
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background-color: rgba(73, 177, 245, 0.2);
+  border-radius: 2em;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #49b1f5;
+  background-image: -webkit-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.4) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0.4) 75%,
+    transparent 75%,
+    transparent
+  );
+  border-radius: 2em;
+}
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+/* 自定义主题色css变量 */
+/* 默认值 */
+:root {
+  --my-theme-bg-color:#ffffff;
+  --my-theme-text-color:#4c4948;
+
+
+  
+  --my-theme-white-color-1:#ffffff;
+  --my-theme-white-color-2:#EEEEEE;
+  --my-theme-white-color-3:#E5EAF3;
+  --my-theme-black-color-1:#000000;
+  --my-theme-black-color-2:#4c4948;
+  --my-theme-black-color-3:#858585;
+  /* 黑色透明度 */
+  --my-theme-black-color-4:rgba(18,18,18,.8);
+
+}
+
+
+
+/* light风格 */
+html.light a:-webkit-any-link{
+  color: var(--my-theme-black-color-1);
+}
+html.light .my-model .input-item {
+  display: block;
+  width: 100%;
+  margin-bottom: 30px;
+  border: 0;
+  padding: 10px 10px 5px 0;
+  border-bottom: 1px solid rgb(128, 125, 125);
+  font-size: 15px;
+  outline: none;
+}
+html.light .my-model .input-item:hover{
+  border-bottom: 1px solid rgb(18,18,18,.8);
+}
+/* dark风格 */
+html.dark a:-webkit-any-link{
+  color: var(--my-theme-white-color-3);
+}
+html.dark .hljs{
+  background: var(--my-theme-black-color-1);
+}
+html.dark .my-model .login-body,
+html.dark .my-model .register-body,
+html.dark .my-model .forget-body{
+  background: rgba(18,18,18,.8);
+}
+html.dark .my-model .input-item {
+  display: block;
+  width: 100%;
+  margin-bottom: 30px;
+  border: 0;
+  padding: 10px 10px 5px 0;
+  font-size: 15px;
+  outline: none;
+}
+
