@@ -1,0 +1,73 @@
+#配置项目启动端口
+server:
+  port: 8080
+
+#配置数据库mysql
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://ip/blog?serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: #用户名
+    password: #密码
+  # redis配置
+  redis:
+    host: ip
+    port: 6379
+    password: #密码
+  #配置QQ邮箱POP3/SMTP发送邮箱验证码
+  mail:
+    host: smtp.qq.com
+    username: #邮箱
+      # 配置密码，注意不是真正的密码，而是刚刚申请到的授权码
+    password: #授权码
+    default-encoding: UTF-8
+    port: 587
+    # 配置SSL 加密工厂
+    properties:
+      mail:
+        smtp:
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
+        #表示开启 DEBUG 模式，这样，邮件发送过程的日志会在控制台打印出来，方便排查错误
+        debug: true
+  #配置rabbitmq
+  rabbitmq:
+    host: #ip
+    port: 5672
+    username: #用户名
+    password: #密码
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 3 #最大重试次数
+          initial-interval: 3000 #重试间隔时间（单位毫秒）
+
+
+#配置mybatis-plus
+mybatis-plus:
+  mapper-locations: classpath:mappers/*.xml
+  configuration:
+    #开启sql语句控制台打印
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+# 上传文件模式 可选 oss或local  （http://和最后的/一定不能去！！！）
+upload:
+  mode: local
+  local:
+    # nginx映射本地文件路径，无域名则为 ip:83
+    url: #ip
+    # 本地文件存储路径
+    path: /usr/local/blogfiles/
+  oss:
+    url: http://Bucket域名/
+    endpoint: OSS配置endpoint
+    accessKeyId: OSS配置accessKeyId
+    accessKeySecret: OSS配置accessKeySecret
+    bucketName: OSS配置bucketName
+  cos:
+    url: http://Bucket域名/
+    secretId: cos的secretId
+    secretKey: cos的secretKey
+    region: cos的region
+    bucketName: cos的bucketName
