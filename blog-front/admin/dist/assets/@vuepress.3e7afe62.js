@@ -1,0 +1,2 @@
+var p=n=>{const r=n.renderer.rules.fence;n.renderer.rules.fence=(...s)=>{const e=r(...s),l=e.slice(e.indexOf("<code>"),e.indexOf("</code>")).split(`
+`),o=`<div class="line-numbers-wrapper">${[...Array(l.length-1)].map((t,c)=>`<span class="line-number">${c+1}</span><br>`).join("")}</div>`;return e.replace("<!--beforeend-->",`${o}<!--beforeend-->`).replace("extra-class","line-numbers-mode")}};export{p as l};
