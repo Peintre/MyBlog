@@ -8,11 +8,17 @@
                 </h1>
                 <!-- 打字机特效 -->
                 <div class="blog-intro">
-                    {{ obj.output }}
+                    <Typewriter/>
                     <span class="typed-cursor">|</span>
                 </div>
                 <!--联系方式:手机端显示 -->
                 <div class="blog-contact contact-device">
+                    <a
+                        v-if="blogInfo.websiteConfig.socialUrlList.indexOf('github')!=-1"
+                        target="_blank"
+                        :href="blogInfo.websiteConfig.github"
+                        class="mr-5 iconfont icongithub"
+                    />
                     <a 
                         v-if="blogInfo.websiteConfig.socialUrlList.indexOf('qq')!=-1" 
                         class="mr-5 iconfont iconqq"
@@ -21,12 +27,6 @@
                         + blogInfo.websiteConfig.qq +
                         '&site=qq&menu=yes'
                         "
-                    />
-                    <a
-                        v-if="blogInfo.websiteConfig.socialUrlList.indexOf('github')!=-1"
-                        target="_blank"
-                        :href="blogInfo.websiteConfig.github"
-                        class="mr-5 iconfont icongithub"
                     />
                     <a
                         v-if="blogInfo.websiteConfig.socialUrlList.indexOf('gitee')!=-1"
@@ -221,7 +221,7 @@
 <script>
 import {praseDateStr} from "@/assets/js/common.js"
 import Swiper from "@/components/Swiper.vue"
-import EasyTyper from "easy-typer-js";
+import Typewriter from "@/components/Typewriter.vue"
 import { ElMessage } from 'element-plus'
 export default {
     mounted() {
@@ -243,11 +243,11 @@ export default {
         this.init()
     },
     components:{
-        Swiper
+        Swiper,
+        Typewriter
     },
     data: function() {
         return {
-            newSentence:'',
             isLoadComplete:false,
             cover:'',
             current:1,
@@ -274,16 +274,6 @@ export default {
                 tagCount: 0,
                 viewsCount: 0
             },
-            obj: {
-                output: '',
-                isEnd: false,
-                speed: 300,
-                singleBack: true,
-                sleep: 3000,
-                type: "roolback",
-                backSpeed: 100,
-                sentencePause: false
-            },
             list_contain: [],
             articleList:[]
         }
@@ -292,31 +282,12 @@ export default {
         init(){
             //获取网站数据
             this.webConfigData() 
-            this.fetchData()
             //获取说说数据
             this.listTalks()  
             //获取文章数据
             this.listArticles()    
             //动态时间跳转
             setInterval(this.runTime, 1000)  
-        },
-        fetchData(){
-            let this_ = this
-            // 一言Api进行打字机循环输出效果
-            fetch("https://v1.hitokoto.cn?c=i")
-             .then(response => response.json())
-             .then(data => {
-                this_.newSentence = data.hitokoto
-             })
-             .catch(console.error)
-        },
-        initTyped(input,hooks) {
-            this.obj.singleBack = true
-            const obj = this.obj
-            const typed = new EasyTyper(obj, input,this.completeAsentence,hooks)
-        },
-        completeAsentence(){
-            this.fetchData()
         },
         scrollDown(){
             window.scrollTo({
@@ -423,9 +394,6 @@ export default {
         blogInfos(newVal){
             this.blogInfo = newVal
             this.bannerBackShow(this.blogInfo)
-        },
-        newSentence(newVal,oldVal){
-            this.initTyped(newVal)
         }
     }
 }

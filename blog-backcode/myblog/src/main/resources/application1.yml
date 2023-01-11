@@ -6,7 +6,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://ip/blog?serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://ip:port/blog?serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: #用户名
     password: #密码
   # redis配置
