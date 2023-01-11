@@ -1,5 +1,5 @@
 <template>
-    <div class="banner" :style="{'background':'url('+imageUrl+') center center / cover no-repeat'}">
+    <div class="banner bannerIn" :style="{'background':'url('+imageUrl+') center center / cover no-repeat'}">
         <h1 class="banner-title">{{pageTitle}}</h1>
     </div>
 </template>
@@ -26,10 +26,8 @@ export default {
         background-attachment: fixed;
         text-align: center;
         color: #fff!important;
-        animation: header-effect 1s;
     }   
     .banner-title {
-        animation: title-scale 1s;
         position: absolute;
         top: 12.5rem;
         padding: 0 0.5rem;
@@ -50,7 +48,6 @@ export default {
         background-attachment: fixed;
         text-align: center;
         color: #fff!important;
-        animation: header-effect 1s;
     } 
     .banner-title {
         position: absolute;
@@ -59,7 +56,6 @@ export default {
         font-size: 1.625rem;
         text-align: center;
         color: #eee;
-        animation: title-scale 1s;
     }
 }
 </style>

@@ -1,6 +1,10 @@
 # idea Editor
 /blog-backcode/myblog/.idea/
 /blog-backcode/myblog/target/
+/blog-backcode/myblog/src/main/resources/application.yml
+/blog-backcode/myblog/src/main/resources/application2.yml
+
+
 
 #vscode Editor
 /blog-front/admin/.vscode/

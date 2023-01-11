@@ -1,7 +1,7 @@
 <template>
     <div class="my-main">
         <!-- banner图 -->
-        <div class="my-home-banner" :style=" 'background: url(' + cover + ') center center / cover no-repeat;' ">
+        <div class="my-home-banner bannerIn" :style=" 'background: url(' + cover + ') center center / cover no-repeat;' ">
             <div class="banner-container">
                 <h1 class="blog-title animated zoomIn">
                     {{blogInfo.websiteConfig.websiteAuthor}}个人博客
@@ -421,7 +421,6 @@ export default {
     height: 100vh;
     background-attachment: fixed;
     text-align: center;
-    animation: header-effect 1s;
 }
 .banner-container {
     margin-top: 43vh;

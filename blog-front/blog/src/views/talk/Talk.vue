@@ -168,7 +168,7 @@ export default {
         //banner背景显示
         if(blogInfo.pageList && blogInfo.pageList.length>0){
             blogInfo.pageList.forEach(item => {
-            if (item.pageLabel == "archive") {
+            if (item.pageLabel == "talk") {
                 this_.cover = item.pageCover
                 this_.pageTitle = item.pageName
             }
