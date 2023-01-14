@@ -74,8 +74,18 @@
                     <i class="iconfont iconbiaoqian" /> 标签
                     </router-link>
                 </div>
-                <div class="menus-item pointer">
+                <div class="menus-item pointer" v-if="this.$store.getters.getUserInfo.avatar == null">
                     <a @click="openLogin"><i class="iconfont icondenglu" /> 登录 </a>
+                </div>
+                <div v-else>
+                    <div class="menus-item">
+                        <router-link to="/personalCenter">
+                            <i class="iconfont icongerenzhongxin" /> 个人中心
+                        </router-link>
+                    </div>
+                    <div class="menus-item pointer">
+                        <a @click="logout"><i class="iconfont icontuichu" /> 退出</a>
+                    </div>
                 </div>
             </div>
         </el-drawer>
@@ -84,33 +94,29 @@
 
 <script>
 export default {
-    props:{
-        blogInfos:{
-            type: Object,
-            default() {
-                return {}
-            }
-        }
-    },
-    data:function(){
-        return{
-            blogInfo:{
-                websiteConfig:{
-                    websiteAvatar:''
-                },
-                articleCount: 0,
-                categoryCount: 0,
-                tagCount: 0
-            } 
-        }
-    },
     methods:{
         closeDrawer(){
            this.$refs.myDrawer.handleClose()
         },
         openLogin(){
-            this.$store.commit('changeLoginFlag',true)
+            this.$store.commit('setModelFlag',true)
             this.$refs.myDrawer.handleClose()
+        },
+        logout(){
+            //如果在个人中心则跳回上一页
+            if (this.$route.path == "/personalCenter") {
+                this.$router.go(-1)
+            }
+            const this_ = this
+            this.axios.get("/api/logout").then(({ data }) => {
+                if (data.flag) {
+                    this_.$store.commit("resetUserInfo")
+                    this_.$message.success("注销成功")
+                    this_.$refs.myDrawer.handleClose()
+                } else {
+                    this_.$message.error(data.message)
+                }
+            })
         }
     },
     computed: {
@@ -121,19 +127,17 @@ export default {
             get(){
                 return this.$store.state.mbMenu
             }
-        }
-    },
-    watch:{
-        blogInfos(newVal){
-            this.blogInfo = newVal
+        },
+        blogInfo(){
+            return this.$store.state.blogInfo
         }
     }
 }
 </script>
 
 <style scoped>
-.my-sider a{
-    color: #000000;
+.my-sider{
+    overflow-x: hidden;
 }
 .blogger-info {
   padding: 26px 30px 0;
@@ -170,7 +174,7 @@ hr {
     transform: translateX(200px);
   }
   100% {
-    transform: translateX(0);
+    transform: translateX(0px);
   }
 }
 </style>

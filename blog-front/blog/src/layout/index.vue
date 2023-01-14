@@ -1,27 +1,27 @@
 <template>
       <!-- 导航栏 -->
       <div class="header" id="header">
-        <Header :blogInfos='blogInfo'></Header>
+        <Header />
       </div >
       <!-- 侧边导航栏 -->
-      <div class="siderBar">
-        <SiderBar :blogInfos='blogInfo'></SiderBar>
+      <div class="siderBar hidden-sm-and-up">
+        <SiderBar />
       </div >
       <!-- 页面内容 -->
       <div class="main">
-        <router-view :blogInfos='blogInfo' :key="$route.fullPath"/>
+        <router-view :key="$route.fullPath"/>
       </div>
       <!-- 页脚 -->
       <div class="footer">
-        <Footer :blogInfos='blogInfo'></Footer>
+        <Footer />
       </div>
       <!-- 返回顶部 -->
       <div class="backTop">
-        <BackToTop></BackToTop>
+        <BackToTop />
       </div>
       <!-- 登录模态框 -->
       <div class="loginIn">
-        <Model :blogInfos='blogInfo'></Model>
+        <Model />
       </div>
          
 </template>
@@ -44,16 +44,11 @@ export default {
     BackToTop,
     Model
   },
-  data:function(){
-    return{
-      blogInfo: {}
-    }
-  },
   methods:{
     listWebConfigInfo(){
       let this_=this
-      this.axios.get("/api/websiteConfig/getWebConfig").then(({ data }) => {
-        this_.blogInfo = data.data
+      this.axios.get("/api/websiteConfig/getWebConfig").then(({ data }) => {   
+        this_.$store.commit('setBlogInfo',data.data)
       })
     }
   }
@@ -65,6 +60,9 @@ export default {
   position: fixed;
   z-index: 1;
   width: 100%;
+}
+.main{
+  min-height: calc(100vh - 136px);
 }
 </style>
 

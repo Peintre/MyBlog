@@ -1,6 +1,6 @@
 <template>
-    <div class="banner bannerIn" :style="{'background':'url('+imageUrl+') center center / cover no-repeat'}">
-        <h1 class="banner-title">{{pageTitle}}</h1>
+    <div class="banner bannerIn" :style="{'background':'url('+coverInfo.cover+') center center / cover no-repeat'}">
+        <h1 class="banner-title">{{coverInfo.pageTitle}}</h1>
     </div>
 </template>
 
@@ -8,9 +8,26 @@
 export default {
     props: ['imageUrl','pageTitle'],
     computed :{
-       
+        coverInfo(){
+            let coverInfo = {
+                cover: '',
+                pageTitle: ''
+            }
+            if(this.imageUrl && this.pageTitle){
+                coverInfo.cover = this.imageUrl
+                coverInfo.pageTitle = this.pageTitle
+            }else{
+                let page = this.$route.path.split('/')[1]
+                Array.from(this.$store.state.blogInfo.pageList).forEach(item => {
+                    if (item.pageLabel == page) {
+                        coverInfo.cover = item.pageCover
+                        coverInfo.pageTitle = item.pageName
+                    }
+                })
+            }
+            return coverInfo
+        }
     }
-
 }
 </script>
 

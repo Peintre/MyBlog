@@ -13,11 +13,6 @@ import Forget from '@/components/model/Forget.vue'
 export default{
     data:function(){
         return{
-            blogInfo: {
-                websiteConfig:{
-                    socialLoginList:[]
-                }
-            },
             loginFlag: true,
             registerFlag: false,
             forgetFlag: false,
@@ -43,13 +38,11 @@ export default{
         stopMove(){
             let m = function(e){e.preventDefault()}
             document.body.style.overflow='hidden'
-            document.addEventListener("touchmove",m,{ passive:false })//禁止页面滑动
         },
         //开启页面滚动
         Move(){
             let m =function(e){e.preventDefault()}
-            document.body.style.overflow=''//出现滚动条
-            document.removeEventListener("touchmove",m,{ passive:true })
+            document.body.style.overflow = ''
         },
         //关闭页面
         closeBtn(){

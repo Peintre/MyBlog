@@ -1,6 +1,6 @@
 <template>
   <div class="my-main">
-      <Banner :imageUrl="cover" :pageTitle="pageTitle"></Banner>
+      <Banner />
       <el-card class="card-content my-category-container">
         <div class="category-title">分类 - {{ count }}</div>
         <ul class="category-list">
@@ -22,35 +22,17 @@
 <script>
 import Banner from "@/components/Banner.vue"
 export default {
-  props:{
-      blogInfos:{
-          type: Object,
-          default() {
-              return {}
-          }
-      }
-  },
   components: {
       Banner
   },
   created(){
       //获取分类数据
       this.listArchives()
-      //获取网站数据
-      this.webConfigData() 
   },
   data() {
       return {
           categoryList: [],
-          count: 0,
-          blogInfo:{
-              pageList:{
-                  pageCover:'',
-                  pageName:''
-              }
-          },
-          cover: '',
-          pageTitle:''
+          count: null
       }
   },
   methods:{
@@ -61,29 +43,6 @@ export default {
             this_.categoryList = data.data.recordList
             this_.count = data.data.count
           })
-      },
-      bannerBackShow(blogInfo){
-          //banner背景显示
-          if(blogInfo.pageList && blogInfo.pageList.length>0){
-              blogInfo.pageList.forEach(item => {
-              if (item.pageLabel == "category") {
-              this.cover = item.pageCover
-              this.pageTitle = item.pageName
-              }
-          })
-          }
-      },
-      webConfigData(){ 
-          if(this.blogInfos.pageList){
-              this.blogInfo = this.blogInfos
-          }
-          this.bannerBackShow(this.blogInfo)
-      }
-  },
-  watch:{
-      blogInfos(newVal){
-          this.blogInfo = newVal
-          this.bannerBackShow(this.blogInfo)
       }
   }
 }

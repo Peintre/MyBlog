@@ -2,7 +2,7 @@
   <div class="my-main">
       <Banner :imageUrl="cover" :pageTitle="pageTitle"></Banner>
       <!-- 主体布局 -->
-      <div class="my-main-content my-article-container">
+      <div class="my-main-content my-article-container mainIn">
           <el-row :gutter="10">
             <!-- 左侧内容 -->
             <el-col :md="18" :sm="24" class="container-left">
@@ -44,7 +44,7 @@
                   <!-- 上一篇 -->
                   <div
                     :class="isFull(article.lastArticle.id)"
-                    v-if="article.lastArticle.id"
+                    v-if="article.lastArticle && article.lastArticle.id"
                   >
                     <router-link :to="'/article/' + article.lastArticle.id">
                       <img
@@ -62,7 +62,7 @@
                   <!-- 下一篇 -->
                   <div
                     :class="isFull(article.nextArticle.id)"
-                    v-if="article.nextArticle.id"
+                    v-if="article.nextArticle && article.nextArticle.id"
                   >
                     <router-link :to="'/article/' + article.nextArticle.id">
                       <img
@@ -81,7 +81,7 @@
                 <!-- 推荐文章 -->
                 <div
                   class="recommend-container"
-                  v-if="article.recommendArticleList.length"
+                  v-if="article.recommendArticleList"
                 >
                   <div class="recommend-title">
                     <el-icon :size="20" color="#4c4948"><Star /></el-icon>
@@ -153,22 +153,12 @@
 import Banner from "@/components/Banner.vue"
 import {praseDateStr,markdownToHtml} from "@/assets/js/common.js"
 export default {
-  props:{
-      blogInfos:{
-          type: Object,
-          default() {
-              return {}
-          }
-      }
-  },
   components: {
       Banner
   },
   created(){
       //获取文章数据
       this.listArticle()
-      //获取网站数据
-      this.webConfigData() 
   },
   computed :{
       dataFormat(){
@@ -177,9 +167,14 @@ export default {
           }
       },
       isFull() {
+        const this_ = this
         return function(id) {
+          console.log(this_.article.nextArticle)
           return id ? "post full" : "post";
         }
+      },
+      blogInfo(){
+        return this.$store.state.blogInfo
       },
       cover(){
         return this.article.articleCover
@@ -190,27 +185,7 @@ export default {
   },
   data() {
       return {
-          article: {
-            nextArticle: {
-              id: 0,
-              articleCover: ""
-            },
-            lastArticle: {
-              id: 0,
-              articleCover: ""
-            },
-            recommendArticleList: [],
-            newestArticleList: []
-          },
-          blogInfo:{
-              pageList:{
-                  pageCover:'',
-                  pageName:''
-              },
-              websiteConfig:{
-                  websiteAuthor: ''
-              }
-          },
+          article: {},
           articleHref: window.location.href
       }
   },
@@ -224,25 +199,12 @@ export default {
             //解析markdown格式
             this_.article.articleContent = markdownToHtml(this_.article.articleContent)
           })
-      },
-      webConfigData(){ 
-          if(this.blogInfos.pageList){
-              this.blogInfo = this.blogInfos
-          }
-      }
-  },
-  watch:{
-      blogInfos(newVal){
-          this.blogInfo = newVal
       }
   }
 }
 </script>
 
 <style scoped>
-.container-left{
-  
-}
 .left-card{
   padding: 50px 40px;
 }
@@ -469,6 +431,9 @@ hr {
     margin: 2px;
     background: rgba(18,18,18,.9);
     vertical-align: bottom;
+  }
+  .my-article-container{
+    margin: 240px auto 0 auto !important;
   }
 }
 </style>

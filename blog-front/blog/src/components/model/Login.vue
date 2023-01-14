@@ -51,17 +51,8 @@
 
 <script>
 export default{
-    props:{
-        blogInfos:{
-            type: Object,
-            default() {
-                return {}
-            }
-        }
-    },
     data:function(){
         return{
-            blogInfo: this.blogInfos, 
             username:'',
             userpassword:'',
             pwdType:'password'
@@ -84,11 +75,11 @@ export default{
             const this_ = this
             this.axios.post("/api/login", param).then(({ data }) => {
                 if (data.flag) {
+                    this_.$store.commit('setUserInfo',data.data)
+                    this_.$message.success('登录成功') 
+                    this_.closeBtn() 
                     this_.username = ''
-                    this_.password = ''
-                    this_.$message.success('登录成功')
-                    this_.closeBtn()
-                    this_.$store.commit('setUserInfo',data.data)           
+                    this_.userpassword = ''                  
                 } else {
                     this_.$message.error(data.message)
                 }
@@ -114,9 +105,9 @@ export default{
             this.$emit('clickEvent','forget')
         }
     },
-    watch:{
-        blogInfos(newVal){
-            this.blogInfo = newVal
+    computed:{
+        blogInfo(){
+            return this.$store.state.blogInfo
         }
     }
 }

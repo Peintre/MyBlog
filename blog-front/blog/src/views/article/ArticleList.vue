@@ -1,6 +1,8 @@
 <template>
     <div class="my-main">
-        <Banner :imageUrl="cover" :pageTitle="pageTitle"></Banner>
+        <div class="banner bannerIn" :style="{'background':'url('+cover+') center center / cover no-repeat'}">
+            <h1 class="banner-title">{{pageTitle}} - {{name}}</h1>
+        </div>
         <div class="articleList-card-content">
             <el-row class="my-articleList-container" :gutter="10">
                 <el-col class="my-articleList-col" :md="8" v-for="item of articleList" :key="item.id">
@@ -18,7 +20,7 @@
                         <div class="article-item-info">
                             <!-- 文章标题 -->
                             <div>
-                                <router-link :to="'/article/' + item.id">
+                                <router-link class="text-color-1" :to="'/article/' + item.id">
                                 {{ item.articleTitle }}
                                 </router-link>
                             </div>
@@ -29,11 +31,11 @@
                                 <!-- 文章分类 -->
                                 <router-link
                                     :to="'/category/' + item.categoryId"
-                                    class="float-right"
+                                    class="float-right text-color-1"
                                 >
-                                <el-icon><Postcard /></el-icon>
-                                {{ item.categoryName }}
-                            </router-link>
+                                    <el-icon><Postcard /></el-icon>
+                                    {{ item.categoryName }}
+                                </router-link>
                             </div>
                         </div>
                         <!-- 分割线 -->
@@ -57,7 +59,6 @@
 </template>
 
 <script>
-import Banner from "@/components/Banner.vue"
 import {praseDateStr} from "@/assets/js/common.js"
 export default {
     mounted() {
@@ -67,32 +68,29 @@ export default {
     unmounted() {
         window.removeEventListener("scroll", this.scrollEvent)
     },
-    props:{
-        blogInfos:{
-            type: Object,
-            default() {
-                return {}
-            }
-        }
-    },
-    components: {
-        Banner
-    },
     created(){
         this.getPageType()
         this.listArticle()
-        //获取网站数据
-        this.webConfigData() 
     },
     computed :{
         dataFormat(){
             return function(date){
                 return praseDateStr(date,"YYYY-MM-DD")
             }
+        },
+        cover(){
+            let cover = ''
+            Array.from(this.$store.state.blogInfo.pageList).forEach(item => {
+                if (item.pageLabel == 'articleList') {
+                    cover = item.pageCover
+                }
+            })
+            return cover
         }
     },
     data() {
         return {
+            pageTitle: '',
             isLoadComplete:false,
             current: 1,
             size: 6,
@@ -100,15 +98,7 @@ export default {
             name: '',
             //页面类型：0 分类，1 标签
             pageType: null,
-            articleList: [],
-            blogInfo:{
-                pageList:{
-                    pageCover:'',
-                    pageName:''
-                }
-            },
-            cover: '',
-            pageTitle:''
+            articleList: []
         }
     },
     methods:{
@@ -117,8 +107,10 @@ export default {
             const path = this.$route.path
             if (path.indexOf("/category") != -1) {
                 this.pageType = 0
+                this.pageTitle = '分类'
             } else {
                 this.pageType = 1
+                this.pageTitle = '标签'
             }
         },
         //获取文章数据
@@ -160,30 +152,6 @@ export default {
                     this.listArticle()
                 }
             }    
-        },
-        bannerBackShow(blogInfo){
-            const this_ = this 
-            //banner背景显示
-            if(blogInfo.pageList && blogInfo.pageList.length>0){
-                blogInfo.pageList.forEach(item => {
-                if (item.pageLabel == "archive") {
-                    this_.cover = item.pageCover
-                    this_.pageTitle = item.pageName
-                }
-            })
-            }
-        },
-        webConfigData(){ 
-            if(this.blogInfos.pageList){
-                this.blogInfo = this.blogInfos
-            }
-            this.bannerBackShow(this.blogInfo)
-        }
-    },
-    watch:{
-        blogInfos(newVal){
-            this.blogInfo = newVal
-            this.bannerBackShow(this.blogInfo)
         }
     }
 }
@@ -242,24 +210,61 @@ export default {
     .articleList-card-content{
         animation: main 1s;
         max-width: 1106px;
-        margin: 370px auto 1rem auto;
+        margin: 360px auto 1rem auto;
     }
     .article-item-info{
         line-height: 1.7;
         padding: 15px 15px 12px 18px;
         font-size: 15px;
     }
+    .banner{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 400px;
+        background-attachment: fixed;
+        text-align: center;
+        color: #fff!important;
+    }   
+    .banner-title {
+        position: absolute;
+        top: 12.5rem;
+        padding: 0 0.5rem;
+        width: 100%;
+        font-size: 2.5rem;
+        text-align: center;
+        color: #eee;
+    }
 }
 /*适应移动端 宽度小于767px*/
 @media screen and (max-width: 767px){
     .articleList-card-content{
         animation: main 1s;
-        margin: 240px 5px 20px 5px;
+        margin: 200px 5px 20px 5px;
         padding: 36px 14px;
     }
     .article-item-info {
         line-height: 1.7;
         padding: 15px 15px 12px 18px;
+    }
+    .banner{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 280px;
+        background-attachment: fixed;
+        text-align: center;
+        color: #fff!important;
+    } 
+    .banner-title {
+        position: absolute;
+        top: 8.5rem;
+        width: 100%;
+        font-size: 1.625rem;
+        text-align: center;
+        color: #eee;
     }
 }
 /* 动画效果 */

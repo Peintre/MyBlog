@@ -1,6 +1,6 @@
 <template>
   <div class="my-main">
-      <Banner :imageUrl="cover" :pageTitle="pageTitle"></Banner>
+      <Banner />
       <div class="card-content">
         <el-row class="my-album-container" :gutter="60">
             <el-col :md="12" v-for="item of photoAlbumList" :key="item.id">
@@ -20,34 +20,16 @@
 <script>
 import Banner from "@/components/Banner.vue"
 export default {
-  props:{
-      blogInfos:{
-          type: Object,
-          default() {
-              return {}
-          }
-      }
-  },
   components: {
       Banner
   },
   created(){
       //获取相册数据
       this.listPhotoAlbums()
-      //获取网站数据
-      this.webConfigData() 
   },
   data() {
       return {
-          photoAlbumList: [],
-          blogInfo:{
-              pageList:{
-                  pageCover:'',
-                  pageName:''
-              }
-          },
-          cover: '',
-          pageTitle:''
+          photoAlbumList: []
       }
   },
   methods:{
@@ -57,30 +39,6 @@ export default {
           .then(({ data }) => {
             this_.photoAlbumList = data.data
           })
-      },
-      bannerBackShow(blogInfo){
-        const this_ = this
-          //banner背景显示
-          if(blogInfo.pageList && blogInfo.pageList.length>0){
-              blogInfo.pageList.forEach(item => {
-              if (item.pageLabel == "album") {
-                this_.cover = item.pageCover
-                this_.pageTitle = item.pageName
-              }
-          })
-          }
-      },
-      webConfigData(){ 
-          if(this.blogInfos.pageList){
-              this.blogInfo = this.blogInfos
-          }
-          this.bannerBackShow(this.blogInfo)
-      }
-  },
-  watch:{
-      blogInfos(newVal){
-          this.blogInfo = newVal
-          this.bannerBackShow(this.blogInfo)
       }
   }
 }
@@ -166,11 +124,17 @@ export default {
     .album-item{
         margin-top: 60px;
     }
+    .card-content{
+        margin: 300px auto 40px auto;
+    }
 }
 /*适应移动端 宽度小于767px*/
 @media screen and (max-width: 767px){
     .album-item{
         margin-top: 30px;
+    }
+    .card-content{
+        margin: 190px 5px 20px 5px;
     }
 }
 </style>

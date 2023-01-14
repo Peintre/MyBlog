@@ -1,6 +1,6 @@
 <template>
   <div class="my-main">
-      <Banner :imageUrl="cover" :pageTitle="pageTitle"></Banner>
+      <Banner />
       <div class="card-content">
             <!-- 卡片 -->
             <el-card 
@@ -87,22 +87,12 @@
 import Banner from "@/components/Banner.vue"
 import {praseDateStr} from "@/assets/js/common.js"
 export default {
-  props:{
-      blogInfos:{
-          type: Object,
-          default() {
-              return {}
-          }
-      }
-  },
   components: {
       Banner
   },
   created(){
       //获取说说数据
       this.listTalks()
-      //获取网站数据
-      this.webConfigData() 
   },
   computed :{
       dataFormat(){
@@ -122,15 +112,7 @@ export default {
           size: 10,
           talkList: [],
           previewList: [],
-          count: 0,
-          blogInfo:{
-              pageList:{
-                  pageCover:'',
-                  pageName:''
-              }
-          },
-          cover: '',
-          pageTitle:''
+          count: 0
       }
   },
   methods:{
@@ -162,31 +144,7 @@ export default {
     },
     like(talk) {
         return false
-    },
-    bannerBackShow(blogInfo){
-        const this_ = this
-        //banner背景显示
-        if(blogInfo.pageList && blogInfo.pageList.length>0){
-            blogInfo.pageList.forEach(item => {
-            if (item.pageLabel == "talk") {
-                this_.cover = item.pageCover
-                this_.pageTitle = item.pageName
-            }
-        })
-        }
-    },
-    webConfigData(){ 
-        if(this.blogInfos.pageList){
-            this.blogInfo = this.blogInfos
-        }
-        this.bannerBackShow(this.blogInfo)
     }
-  },
-  watch:{
-      blogInfos(newVal){
-          this.blogInfo = newVal
-          this.bannerBackShow(this.blogInfo)
-      }
   }
 }
 </script>
@@ -258,5 +216,17 @@ export default {
 }
 .like-btn:hover {
   color: #eb5055 !important;
+}
+/*适应PC端 宽度大于768px*/
+@media screen and (min-width: 768px) {
+    .card-content{
+        margin: 340px auto 40px auto;
+    }
+}
+/*适应移动端 宽度小于767px*/
+@media screen and (max-width: 767px){
+    .card-content{
+        margin: 200px 5px 20px 5px;
+    }
 }
 </style>

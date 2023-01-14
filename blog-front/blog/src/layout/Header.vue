@@ -2,7 +2,7 @@
     <div :class="navClass">
         <div class="my-header header-device">
             <!-- 手机端导航栏 -->
-            <div class="nav-mobile-container hidden-md-and-up">
+            <div class="nav-mobile-container hidden-sm-and-up">
                 <div class="blog-title">
                     <a>{{blogInfo.websiteConfig.websiteName}}</a>
                 </div>
@@ -16,7 +16,7 @@
                 </div>
             </div>
             <!-- 电脑导航栏 -->
-            <div class="nav-container hidden-sm-and-down">
+            <div class="nav-container hidden-xs-only">
                 <div class="float-left blog-title ">
                     <a>{{blogInfo.websiteConfig.websiteName}}</a>
                 </div>
@@ -122,24 +122,14 @@ export default {
         //监听页面滚动事件
         window.addEventListener("scroll", this.scrollBottom,true)
     },
-    props:{
-        blogInfos:{
-            type: Object,
-            default() {
-                return {}
-            }
-        }
+    unmounted() {
+        window.removeEventListener("scroll", this.scrollBottom)
     },
     data: function() {
         return {
             navClass: 'top',
             // 滚动前，滚动条距离顶部的距离
-            oldScrollTop: 0,
-            blogInfo:{
-                websiteConfig:{
-                    websiteName:''
-                }
-            }
+            oldScrollTop: 0
         }
     },
     methods: {
@@ -200,13 +190,10 @@ export default {
             })
         }
     },
-    watch:{
-        blogInfos(newVal){
-            this.blogInfo = newVal
+    computed:{
+        blogInfo(){
+            return this.$store.state.blogInfo
         }
-    },
-    unmounted() {
-        window.removeEventListener("scroll", this.scrollBottom)
     }
 }
 </script>

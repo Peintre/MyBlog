@@ -50,6 +50,9 @@
 .bannerIn {
   animation: headIn 1s;
 }
+.mainIn{
+  animation: main 1s;
+}
 @keyframes zoomIn{
     0%{
       opacity: 0;
@@ -83,6 +86,10 @@
     transform: translateY(0);
   }
 }
+/* 字体变色*/
+.text-color-1:hover{
+  color: var(--my-theme-text-color-1) !important;
+}
 /* element-plus样式修改 */
 .el-message{
   z-index: 9999 !important;
@@ -103,6 +110,7 @@
 }
 .my-sider .el-drawer__body{
   padding: 0;
+  overflow-x: hidden;
 }
 .my-main .card-content .el-card__body,
 .my-main .my-main-content .el-card__body,
@@ -152,7 +160,7 @@
     }
     .my-main .my-main-content{
         width: 100%;
-        margin: calc(100vh - 66px) auto 0 auto !important;
+        margin: calc(100vh - 330px) auto 0 auto !important;
         padding: 20px 5px 0px 5px;
     }
   
@@ -191,7 +199,7 @@
   --my-theme-bg-color:#ffffff;
   --my-theme-text-color:#4c4948;
 
-
+  --my-theme-text-color-1:#8e8cd8;
   
   --my-theme-white-color-1:#ffffff;
   --my-theme-white-color-2:#EEEEEE;
@@ -199,6 +207,7 @@
   --my-theme-black-color-1:#000000;
   --my-theme-black-color-2:#4c4948;
   --my-theme-black-color-3:#858585;
+  --my-theme-black-color-5: #1d1e1f;
   /* 黑色透明度 */
   --my-theme-black-color-4:rgba(18,18,18,.8);
 
@@ -243,5 +252,8 @@ html.dark .my-model .input-item {
   padding: 10px 10px 5px 0;
   font-size: 15px;
   outline: none;
+}
+html.dark .el-drawer__body{
+  background: var(--my-theme-black-color-5);
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div class="my-main">
-      <Banner :imageUrl="cover" :pageTitle="pageTitle"></Banner>
+      <Banner />
       <el-card class="card-content my-tag-container">
         <div class="tag-cloud-title">标签 - {{ count }}</div>
         <div class="tag-cloud">
@@ -20,35 +20,17 @@
 <script>
 import Banner from "@/components/Banner.vue"
 export default {
-  props:{
-      blogInfos:{
-          type: Object,
-          default() {
-              return {}
-          }
-      }
-  },
   components: {
       Banner
   },
   created(){
       //获取标签数据
       this.listTags()
-      //获取网站数据
-      this.webConfigData() 
   },
   data() {
       return {
-          count: 0,
-          tagList: [],
-          blogInfo:{
-              pageList:{
-                  pageCover:'',
-                  pageName:''
-              }
-          },
-          cover: '',
-          pageTitle:''
+          count: null,
+          tagList: []
       }
   },
   methods:{
@@ -59,30 +41,6 @@ export default {
             this_.tagList = data.data.recordList
             this_.count = data.data.count
           })
-      },
-      bannerBackShow(blogInfo){
-        const this_ = this
-          //banner背景显示
-          if(blogInfo.pageList && blogInfo.pageList.length>0){
-              blogInfo.pageList.forEach(item => {
-              if (item.pageLabel == "tag") {
-                this_.cover = item.pageCover
-                this_.pageTitle = item.pageName
-              }
-          })
-          }
-      },
-      webConfigData(){ 
-          if(this.blogInfos.pageList){
-              this.blogInfo = this.blogInfos
-          }
-          this.bannerBackShow(this.blogInfo)
-      }
-  },
-  watch:{
-      blogInfos(newVal){
-          this.blogInfo = newVal
-          this.bannerBackShow(this.blogInfo)
       }
   }
 }

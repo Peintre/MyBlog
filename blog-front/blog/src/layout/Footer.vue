@@ -24,30 +24,9 @@ export default {
       return function(date){
         return praseDateStr(date,"YYYY")
       }
-    }
-  },
-  props:{
-      blogInfos:{
-          type: Object,
-          default() {
-              return {}
-          }
-      }
-  },
-  data:function(){
-    return{
-      blogInfo:{
-        websiteConfig:{
-          websiteCreateTime:'',
-          websiteAuthor:'',
-          websiteRecordNo:''
-        }
-      }
-    }
-  },
-  watch:{
-    blogInfos(newVal){
-      this.blogInfo = newVal
+    },
+    blogInfo(){
+      return this.$store.state.blogInfo
     }
   }
 }

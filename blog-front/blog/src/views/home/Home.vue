@@ -59,6 +59,7 @@
                         <router-link :to="'/article/' + item.id">
                             <el-image
                                 class="on-hover block"
+                                fit="cover"
                                 :src="item.articleCover"
                             />
                         </router-link>
@@ -130,7 +131,7 @@
                         <!-- 博客信息 -->
                         <div class="blog-info-wrapper">
                             <div class="blog-info-data">
-                                <router-link to="/archives">
+                                <router-link to="/archive">
                                 <div style="font-size: 0.875rem">文章</div>
                                 <div style="font-size: 1.25rem">
                                     {{ blogInfo.articleCount }}
@@ -138,7 +139,7 @@
                                 </router-link>
                             </div>
                             <div class="blog-info-data">
-                                <router-link to="/categories">
+                                <router-link to="/category">
                                 <div style="font-size: 0.875rem">分类</div>
                                 <div style="font-size: 1.25rem">
                                     {{ blogInfo.categoryCount }}
@@ -146,19 +147,25 @@
                                 </router-link>
                             </div>
                             <div class="blog-info-data">
-                                <router-link to="/tags">
+                                <router-link to="/tag">
                                 <div style="font-size: 0.875rem">标签</div>
                                 <div style="font-size: 1.25rem">{{ blogInfo.tagCount }}</div>
                                 </router-link>
                             </div>
                         </div>
                         <!-- 收藏按钮 -->
-                        <a class="collection-btn" @click="collectBtn">
+                        <a class="collection-btn pointer" @click="collectBtn">
                             <el-icon color="#fff" :size="18"><CollectionTag /></el-icon>
                             <span>加入书签</span>
                         </a>
                         <!-- 社交信息 -->
                         <div class="card-info-social">
+                            <a
+                                v-if="blogInfo.websiteConfig.socialUrlList.indexOf('github')!=-1"
+                                target="_blank"
+                                :href="blogInfo.websiteConfig.github"
+                                class="iconfont icongithub"
+                            />
                             <a
                                 v-if="blogInfo.websiteConfig.socialUrlList.indexOf('qq')!=-1"
                                 class="iconfont iconqq"
@@ -169,12 +176,6 @@
                                     blogInfo.websiteConfig.qq +
                                     '&site=qq&menu=yes'
                                 "
-                            />
-                            <a
-                                v-if="blogInfo.websiteConfig.socialUrlList.indexOf('github')!=-1"
-                                target="_blank"
-                                :href="blogInfo.websiteConfig.github"
-                                class="iconfont icongithub"
                             />
                             <a
                                 v-if="blogInfo.websiteConfig.socialUrlList.indexOf('gitee')!=-1"
@@ -231,14 +232,6 @@ export default {
     unmounted() {
         window.removeEventListener("scroll", this.scrollEvent)
     },
-    props:{
-        blogInfos:{
-            type: Object,
-            default() {
-                return {}
-            }
-        }
-    },
     created() {
         this.init()
     },
@@ -249,41 +242,17 @@ export default {
     data: function() {
         return {
             isLoadComplete:false,
-            cover:'',
             current:1,
             size:5,
             time:'',
-            blogInfo:{
-                websiteConfig:{
-                    websiteAvatar:'',
-                    websiteAuthor: '',
-                    websiteIntro: '',
-                    qq: '',
-                    github: '',
-                    gitee: '',
-                    websiteNotice: '',
-                    socialUrlList:[],
-                    websiteCreateTime:''
-                },
-                pageList:{
-                    pageCover:'',
-                    pageLabel:''
-                },
-                articleCount: 0,
-                categoryCount: 0,
-                tagCount: 0,
-                viewsCount: 0
-            },
             list_contain: [],
             articleList:[]
         }
     },
     methods: {
         init(){
-            //获取网站数据
-            this.webConfigData() 
             //获取说说数据
-            this.listTalks()  
+            this.listTalks() 
             //获取文章数据
             this.listArticles()    
             //动态时间跳转
@@ -356,23 +325,6 @@ export default {
             str += day.getMinutes() + '分'
             str += day.getSeconds() + '秒'
             this.time = str
-        },
-        webConfigData(){ 
-            if(this.blogInfos.pageList){
-                this.blogInfo = this.blogInfos
-            }
-            this.bannerBackShow(this.blogInfo)
-        },
-        bannerBackShow(blogInfo){
-            const this_ = this
-            //banner背景显示
-            if(blogInfo.pageList && blogInfo.pageList.length>0){
-                blogInfo.pageList.forEach(item => {
-                if (item.pageLabel == "home") {
-                    this_.cover = item.pageCover
-                }
-            })
-            }
         }
     },
     computed: {
@@ -388,12 +340,18 @@ export default {
             return function(date){
                 return praseDateStr(date,"YYYY-MM-DD")
             }
-        }
-    },
-    watch:{
-        blogInfos(newVal){
-            this.blogInfo = newVal
-            this.bannerBackShow(this.blogInfo)
+        },
+        blogInfo(){
+            return this.$store.state.blogInfo
+        },
+        cover(){
+            let cover = ''
+            Array.from(this.$store.state.blogInfo.pageList).forEach(item => {
+                if (item.pageLabel == "home") {
+                cover = item.pageCover;
+                }
+            })
+            return cover
         }
     }
 }
@@ -441,7 +399,7 @@ export default {
     font-size: 14px;
     z-index: 1;
 }
- .article-wrapper .article-info a{
+.article-wrapper .article-info a{
     color:var(--my-theme-black-color-3);
 }
 .article-wrapper a:hover {
@@ -569,6 +527,10 @@ export default {
 .article-cover .block{
     display: block;
 }
+.blog-contact a{
+    color: var(--my-theme-white-color-3) !important;
+    padding-left: 10px;
+}
 /*适应PC端 宽度大于768px*/
 @media screen and (min-width: 768px) {
     .contact-device{
@@ -628,6 +590,7 @@ export default {
     .article-cover{
         height: 230px;
         width: 100%;
+        overflow: hidden;
     }
     .article-wrapper{
         padding: 1.25rem 1.25rem 1.875rem;
