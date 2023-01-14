@@ -13,4 +13,5 @@
 /blog-front/blog/.vscode/
 /blog-front/blog/node_modules/
 /blog-front/blog/package-lock.json
-/dist/
+/blog-front/admin/dist/
+/blog-front/blog/dist/
