@@ -59,6 +59,14 @@ public class ArticleController{
         return Result.ok(articleService.exportArticles(articleIdList));
     }
 
+    @ApiOperation(value = "导入文章")
+    @ApiImplicitParam(name = "files", value = "文章文件列表", required = true, dataType = "MultipartFile[]")
+    @PostMapping("/importArticles")
+    public Result<?> importArticles(MultipartFile[] files) {
+        articleService.importArticles(files);
+        return Result.ok();
+    }
+
     //@OptLog(optType = SAVE_OR_UPDATE)
     @ApiOperation(value = "添加/修改文章")
     @PostMapping("/saveOrUpdateArticle")
@@ -105,7 +113,7 @@ public class ArticleController{
     }
 
     //@OptLog(optType = UPDATE)
-    @ApiOperation(value = "修改文章置顶状态")
+    @ApiOperation(value = "修改文章置顶")
     @PostMapping("/articleTopStatus")
     public Result<?> updateArticleTop(@Valid @RequestBody ArticleTopVo articleTopVo) {
         articleService.updateArticleTop(articleTopVo);

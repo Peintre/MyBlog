@@ -143,7 +143,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
         Integer count = roleResourceDao.selectCount(new LambdaQueryWrapper<RoleResource>()
                 .eq(RoleResource::getResourceId, resourceId));
         if (count > 0) {
-            throw new BizException("该资源下存在角色");
+//            throw new BizException("该资源下存在角色");
         }
         // 删除子资源
         List<Integer> resourceIdList = resourceDao.selectList(new LambdaQueryWrapper<Resource>()

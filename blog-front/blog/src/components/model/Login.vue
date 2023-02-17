@@ -36,12 +36,14 @@
                     v-if="blogInfo.websiteConfig.socialLoginList.indexOf('weibo')!=-1"
                     class="mr-3 iconfont iconweibo pointer my-mr-1"
                     style="color:#e05244"
+                    @click="loginQuick('weibo')"
                     />
                     <!-- qq登录 -->
                     <a
                     v-if="blogInfo.websiteConfig.socialLoginList.indexOf('qq')!=-1"
                     class="iconfont iconqq pointer my-ml-1"
                     style="color:#00AAEE"
+                    @click="loginQuick('qq')"
                     />
                 </div>
             </div>
@@ -103,6 +105,15 @@ export default{
         //忘记密码
         forget(){
             this.$emit('clickEvent','forget')
+        },
+        //快速登录
+        loginQuick(type){
+            if(type==='weibo'){
+                this.$message.warning('暂未实现') 
+            }
+            if(type==='qq'){
+                this.$message.warning('暂未实现') 
+            }
         }
     },
     computed:{

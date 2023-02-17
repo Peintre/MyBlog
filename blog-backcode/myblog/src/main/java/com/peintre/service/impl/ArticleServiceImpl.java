@@ -3,6 +3,7 @@ package com.peintre.service.impl;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.hutool.core.util.StrUtil;
@@ -28,9 +29,12 @@ import com.peintre.vo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +43,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static com.peintre.constant.CommonConst.FALSE;
+import static com.peintre.constant.CommonConst.TRUE;
 import static com.peintre.constant.RedisPrefixConst.ARTICLE_LIKE_COUNT;
 import static com.peintre.constant.RedisPrefixConst.ARTICLE_VIEWS_COUNT;
 import static com.peintre.enums.ArticleStatusEnum.DRAFT;
@@ -278,6 +283,40 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
                     .select(Tag::getTagName).eq(Tag::getId, condition.getTagId())).getTagName();
         }
         return ArticlePreviewListDTO.builder().articlePreviewDTOList(articlePreviewDTOList).name(name).build();
+    }
+
+    @Override
+    public void importArticles(MultipartFile[] files) {
+        if(files.length<1){
+            throw new BizException("文件不存在");
+        }
+        for(MultipartFile file:files){
+            // 获取文件名作为文章标题
+            String filename = file.getOriginalFilename();
+            if (StringUtils.isBlank(filename)) {
+                throw new BizException("文件名不能为空");
+            }
+            String[] arr = filename.split("\\.");
+            String articleTitle = arr[0];
+            // 获取文章内容
+            StringBuilder articleContent = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+                while (reader.ready()) {
+                    articleContent.append((char) reader.read());
+                }
+            } catch (IOException e) {
+                log.error(StrUtil.format("导入文章失败, 堆栈:{}", ExceptionUtil.stacktraceToString(e)));
+                throw new BizException("导入文章失败");
+            }
+            // 保存文章
+            ArticleVo articleVO = ArticleVo.builder()
+                    .articleTitle(articleTitle)
+                    .articleContent(articleContent.toString())
+                    .type(TRUE)
+                    .status(DRAFT.getStatus())
+                    .build();
+            this.saveOrUpdateArticle(articleVO);
+        }
     }
 
     /**

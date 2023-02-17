@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * @Program: myblog
- * @Description: FilterInvocationSecurityMetadataSource的实现类，过当前的请求地址，获取该地址需要的用户角色
+ * @Description: FilterInvocationSecurityMetadataSource的实现类，通过当前的请求地址，获取该地址需要的用户角色
  * @Author: Peintre
  * @Date: 2022/12/11 18:33
  **/

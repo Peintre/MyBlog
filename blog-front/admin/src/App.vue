@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-      <router-view />
+      <router-view :key="this.$route.path"/>
     </div>
 </template>
 
@@ -17,7 +17,7 @@ export default {
     // 上传访客信息
    // this.axios.post("/api/report");
   }
-};
+}
 </script>
 
 <style>

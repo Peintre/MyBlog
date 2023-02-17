@@ -354,7 +354,6 @@ export default {
       });
     },
     openResourceModel(role) {
-      debugger
       this.roleForm = JSON.parse(JSON.stringify(role));
       console.log(this.roleForm)
       this.roleResource = true;

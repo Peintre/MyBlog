@@ -10,9 +10,9 @@ const vite_modules =import.meta.glob(`@/views/**/*.vue`);
 
 
 // 获取用户菜单数据
-export async function generaMenu(path) {
+export function generaMenu(path) {
     // 使用axios查询当前用户所拥有的菜单列表
-    await axios.get("/api/menu/getUserMenus").then(({ data }) => {
+    axios.get("/api/menu/getUserMenus").then(({ data }) => {
         if(data.flag){
             store.commit('saveUserMenuList',data.data) 
             if(path) {
@@ -24,7 +24,7 @@ export async function generaMenu(path) {
             //this.$message.error(data.message)
             router.push({ path: "/login" })
         }
-    });
+    })
 }
 
 //加载路由

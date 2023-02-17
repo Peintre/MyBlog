@@ -116,8 +116,7 @@
           <el-popover
             placement="bottom-start"
             width="460"
-            trigger="click"
-            v-if="article.tagNameList.length < 3"
+            trigger="click" 
           >
             <div class="popover-title">标签</div>
             <!-- 搜索框 -->
@@ -150,7 +149,7 @@
               </el-tag>
             </div>
             <template #reference>
-              <el-button type="primary" plain slot="reference" size="default">
+              <el-button type="primary" plain size="default">
                 添加标签
               </el-button>
             </template>
@@ -342,9 +341,6 @@ export default {
     }
   },
   methods: {
-    test(){
-      alert('aaa')
-    },
     //判断页面类型
     articleType(){
       let articleId = this.$route.params.id
@@ -629,8 +625,9 @@ export default {
   },
   computed: {
     tagClass() {
+      const tagNameList = this.article.tagNameList
       return function(item) {
-        const index = this.article.tagNameList.indexOf(item.tagName)
+        const index = tagNameList.indexOf(item.tagName)
         return index != -1 ? "tag-item-select" : "tag-item"
       }
     },

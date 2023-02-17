@@ -1,5 +1,5 @@
 <template>
-    <div class="login-container">
+    <div class="login-container" :style="'background: url('+ cover +') center center / cover no-repeat;'">
       <div class="login-card">
         <div class="login-title">管理员登录</div>
         <!-- 登录表单 -->
@@ -43,15 +43,15 @@
 </template>
 
 <script>
-import store from "@/store";
-import { generaMenu } from "@/assets/js/menu.js";
+import store from "@/store"
+import { generaMenu } from "@/assets/js/menu.js"
 import axios from "axios";
 export default {
     data:function(){
         return{
           loginForm: {
             username:"",
-            password:""
+            password:"",
           },
           rules: {
             username: [
@@ -60,7 +60,8 @@ export default {
             password: [
                 { required: true, message: "密码不能为空", trigger: "blur" }
             ]
-      }
+          },
+          cover: 'http://47.92.51.50:83/images/792a4b6934fc491b81342206e3192e59.png'
         }
     },
     methods:{
@@ -78,7 +79,6 @@ export default {
                     generaMenu('/home');
                   } else {
                     this.$message.error(data.message);
-
                   }
                 }
                 )
@@ -96,8 +96,6 @@ export default {
   bottom: 0;
   right: 0;
   left: 0;
-  background: url(http://localhost:8080/images/792a4b6934fc491b81342206e3192e59.png) center center /
-    cover no-repeat;
 }
 .login-card {
   position: absolute;

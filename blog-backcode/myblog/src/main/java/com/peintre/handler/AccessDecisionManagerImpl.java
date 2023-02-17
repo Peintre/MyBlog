@@ -38,7 +38,7 @@ public class AccessDecisionManagerImpl implements AccessDecisionManager {
                 return;
             }
         }
-        throw new AccessDeniedException("没有操作权限00");
+        throw new AccessDeniedException("权限不足");
     }
 
     @Override

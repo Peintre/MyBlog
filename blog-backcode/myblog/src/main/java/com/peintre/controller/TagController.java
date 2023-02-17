@@ -30,7 +30,7 @@ public class TagController{
     @Autowired
     private TagService tagService;
 
-    @ApiOperation(value = "条件查询文章标签")
+    @ApiOperation(value = "条件查询标签")
     @GetMapping("/getTag")
     public Result<List<TagDTO>> listTagsBySearch(ConditionVo condition) {
         return Result.ok(tagService.listTagsBySearch(condition));

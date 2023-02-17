@@ -10,6 +10,7 @@ import com.peintre.dto.blog.ArticlePreviewListDTO;
 import com.peintre.entity.Article;
 import com.peintre.vo.*;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -105,5 +106,13 @@ public interface ArticleService extends IService<Article> {
      * @return 文章列表
      */
     ArticlePreviewListDTO listArticlesByCondition(ConditionVo condition);
+
+    /**
+     * 导入文章
+     *
+     * @param files 文件列表
+     * @return 文章列表
+     */
+    void importArticles(MultipartFile[] files);
 }
 

@@ -50,42 +50,15 @@
         <el-icon><Download /></el-icon>
         <span>批量导出</span>
       </el-button>
-      <el-dropdown>
-        <el-button
+      <el-button
           type="primary"
           size="default"
           style="margin-right:1rem"
+          @click="this.$refs.fileUploadDialog.show()"
         >
           <el-icon><Upload /></el-icon>
-          <span>导入文章</span>
-        </el-button>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item>
-              <el-upload
-                action="/api/admin/articles/import"
-                multiple
-                :limit="9"
-                :show-file-list="false"
-                :on-success="uploadArticle"
-              >
-                普通文章
-              </el-upload>
-            </el-dropdown-item>
-            <el-dropdown-item
-              ><el-upload
-                action="/api/admin/articles/import?type=hexo"
-                multiple
-                :limit="9"
-                :show-file-list="false"
-                :on-success="uploadArticle"
-              >
-                Hexo文章
-              </el-upload></el-dropdown-item
-            >
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+          <span>批量导入</span>
+      </el-button>
       <!-- 条件筛选 -->
       <div style="margin-left:auto">
         <!-- 文章类型 -->
@@ -396,12 +369,17 @@
         </el-button>
       </template> 
     </el-dialog>
+    <FileUpload ref="fileUploadDialog" :fileType="fileType" @uploadSuccess="listArticles"/>
   </el-card>
 </template>
 
 <script>
 import {praseDateStr} from "@/assets/js/common.js"
+import FileUpload from '@/components/FileUpload.vue'
 export default {
+  components:{
+    FileUpload
+  },
   created() {
     this.listArticles();
     this.listCategories();
@@ -409,6 +387,7 @@ export default {
   },
   data: function() {
     return {
+      fileType: ['.md'],
       loading: true,
       updateIsDelete: false,
       remove: false,
@@ -440,8 +419,9 @@ export default {
       status: null,
       current: 1,
       size: 10,
-      count: 0
-    };
+      count: 0,
+      openUploadModel: false,
+    }
   },
   methods: {
     selectionChange(articleList) {

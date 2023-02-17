@@ -26,7 +26,7 @@ import javax.validation.Valid;
  * @Author: Peintre
  * @Date: 2022-12-22 10:30:35
  **/
-@Api(tags = "博客信息配置模块")
+@Api(tags = "博客信息模块")
 @RestController
 @RequestMapping("/websiteConfig")
 public class WebsiteConfigController{
@@ -47,7 +47,7 @@ public class WebsiteConfigController{
         return Result.ok(blogInfoService.getWebsiteConfig());
     }
 
-    @ApiOperation(value = "博客信息配置图片")
+    @ApiOperation(value = "博客信息图片")
     @ApiImplicitParam(name = "file", value = "图片", required = true, dataType = "MultipartFile")
     @PostMapping("/image")
     public Result<String> savePhotoAlbumCover(MultipartFile file) {
@@ -68,7 +68,7 @@ public class WebsiteConfigController{
         return Result.ok();
     }
 
-    @ApiOperation(value = "更新网站配置信息")
+    @ApiOperation(value = "更新网站配置")
     @PostMapping("/updateWebsiteConfig")
     public Result<?> updateWebsiteConfig(@Valid @RequestBody WebsiteConfigVo websiteConfigVo) {
         websiteConfigService.updateWebsiteConfig(websiteConfigVo);

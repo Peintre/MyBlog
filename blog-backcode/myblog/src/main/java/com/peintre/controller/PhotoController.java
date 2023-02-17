@@ -9,6 +9,7 @@ import com.peintre.service.PhotoService;
 import com.peintre.strategy.context.UploadStrategyContext;
 import com.peintre.utils.Result;
 import com.peintre.vo.*;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import javax.validation.Valid;
  * @Date: 2022-12-27 18:11:24
  **/
 @RestController
+@Api(tags = "照片模块")
 @RequestMapping("/photo")
 public class PhotoController{
 
