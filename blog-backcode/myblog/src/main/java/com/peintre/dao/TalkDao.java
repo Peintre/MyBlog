@@ -46,5 +46,13 @@ public interface TalkDao extends BaseMapper<Talk> {
      * @return {@link List<TalkDTO>}
      */
     List<TalkDTO> listTalks(@Param("current") Long current, @Param("size") Long size);
+
+    /**
+     * (前台)根据id查看说说
+     *
+     * @param talkId 说说id
+     * @return {@link TalkDTO} 说说信息
+     */
+    TalkDTO getTalkById(@Param("talkId") Integer talkId);
 }
 

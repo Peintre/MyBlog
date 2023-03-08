@@ -3,6 +3,7 @@ package com.peintre.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.peintre.config.BizException;
 import com.peintre.dao.TalkDao;
 import com.peintre.dto.TalkBackDTO;
 import com.peintre.dto.blog.TalkDTO;
@@ -117,6 +118,27 @@ public class TalkServiceImpl extends ServiceImpl<TalkDao, Talk> implements TalkS
             }
         });
         return new PageResultVo<>(talkDTOList, count);
+    }
+
+    @Override
+    public TalkDTO getTalkById(Integer talkId) {
+        // 查询说说信息
+        TalkDTO talkDTO = talkDao.getTalkById(talkId);
+        if (Objects.isNull(talkDTO)) {
+            throw new BizException("说说不存在");
+        }
+        // 查询说说点赞量
+        //talkDTO.setLikeCount((Integer) redisService.hGet(TALK_LIKE_COUNT, talkId.toString()));
+        // 转换图片格式
+        if (Objects.nonNull(talkDTO.getImages())) {
+            talkDTO.setImgList(CommonUtils.castList(JSON.parseObject(talkDTO.getImages(), List.class), String.class));
+        }
+        return talkDTO;
+    }
+
+    @Override
+    public void saveTalkLike(Integer talkId) {
+
     }
 }
 

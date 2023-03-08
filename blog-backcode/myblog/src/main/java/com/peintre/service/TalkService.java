@@ -63,5 +63,20 @@ public interface TalkService extends IService<Talk> {
      * @return {@link PageResultVo<TalkDTO>} 说说列表
      */
     PageResultVo<TalkDTO> listTalks();
+
+    /**
+     * (前台)根据id查看说说
+     *
+     * @param talkId 说说id
+     * @return {@link TalkDTO} 说说信息
+     */
+    TalkDTO getTalkById(Integer talkId);
+
+    /**
+     * (前台)点赞说说
+     *
+     * @param talkId 说说id
+     */
+    void saveTalkLike(Integer talkId);
 }
 

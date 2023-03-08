@@ -63,5 +63,21 @@
         LIMIT #{current},#{size}
     </select>
 
+    <select id="getTalkById" resultType="com.peintre.dto.blog.TalkDTO">
+        SELECT
+            t.id,
+            nickname,
+            avatar,
+            content,
+            images,
+            t.create_time
+        FROM
+            tb_talk t
+                JOIN tb_user_info ui ON t.user_id = ui.id
+        WHERE
+            t.id = #{talkId}
+          AND t.status = 1
+    </select>
+
 
 </mapper>

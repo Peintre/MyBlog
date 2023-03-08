@@ -93,5 +93,19 @@ public class TalkController{
         return Result.ok(talkService.listTalks());
     }
 
+    @ApiOperation(value = "(前台)根据id查看说说")
+    @ApiImplicitParam(name = "talkId", value = "说说id", required = true, dataType = "Integer")
+    @GetMapping("/blog/getTalk/{talkId}")
+    public Result<TalkDTO> getTalkById(@PathVariable("talkId") Integer talkId) {
+        return Result.ok(talkService.getTalkById(talkId));
+    }
+
+    @ApiOperation(value = "(前台)点赞说说")
+    @ApiImplicitParam(name = "talkId", value = "说说id", required = true, dataType = "Integer")
+    @PostMapping("/blog/talkLike/{talkId}")
+    public Result<?> saveTalkLike(@PathVariable("talkId") Integer talkId) {
+        talkService.saveTalkLike(talkId);
+        return Result.ok();
+    }
 }
 
