@@ -7,7 +7,7 @@
             <!-- 左侧内容 -->
             <el-col :md="18" :sm="24" class="container-left">
               <el-card class="left-card">
-                <article
+                <div
                   class="article-content markdown-body"
                   v-html="article.articleContent"
                   ref="article"
@@ -115,7 +115,14 @@
             <el-col :md="6" class="container-right hidden-sm-and-down">
               <!-- 文章目录 -->
               <el-card class="article_catalog">
-                aaaa
+                <div  v-for="title in titles"
+                  :key="title.id"
+                  @click="scrollToView(title.scrollTop)"
+                  v-show="title.isVisible"
+                  :title="title.rawName"
+                >
+                {{ title.name }}
+                </div>
               </el-card>
               <!-- 最新文章 -->
               <el-card class="newest_article">
@@ -151,7 +158,7 @@
 
 <script>
 import Banner from "@/components/Banner.vue"
-import {praseDateStr,markdownToHtml} from "@/assets/js/common.js"
+import {praseDateStr,markdownToHtml,getCatalog} from "@/assets/js/common.js"
 export default {
   components: {
       Banner
@@ -169,7 +176,6 @@ export default {
       isFull() {
         const this_ = this
         return function(id) {
-          console.log(this_.article.nextArticle)
           return id ? "post full" : "post";
         }
       },
@@ -186,7 +192,8 @@ export default {
   data() {
       return {
           article: {},
-          articleHref: window.location.href
+          articleHref: window.location.href,
+          titles: []
       }
   },
   methods:{
@@ -194,11 +201,60 @@ export default {
           const this_ = this 
           this.axios.get("/api/article/blog/getArticleById/"+this.$route.params.id)
           .then(({ data }) => {
-            console.log(data.data)
-            this_.article = data.data
             //解析markdown格式
-            this_.article.articleContent = markdownToHtml(this_.article.articleContent)
+            data.data.articleContent = markdownToHtml(data.data.articleContent)
+            this_.article = data.data 
+            this_.$nextTick(() => {
+              this_.titles = getCatalog(this_.$refs.article)
+              this_.addListener(this_.titles)
+            })   
           })
+      },
+      addListener(titles){
+          // 监听滚动事件并更新样式
+        window.addEventListener("scroll", this.scrollFunction(titles))
+      },
+      scrollFunction(titles){
+        // progress.value =
+            //     parseInt(
+            //         (window.scrollY / document.documentElement.scrollHeight) *
+            //             100
+            //     ) + "%"
+            let visibleTitles = []
+            for (let i = titles.length - 1; i >= 0; i--) {
+                const title = titles[i]
+                if (title.scrollTop <= window.scrollY) {
+                    if (currentTitle.id === title.id) return
+                    Object.assign(currentTitle, title)
+                    // 展开节点
+                    setChildrenVisible(title, true)
+                    visibleTitles.push(title)
+                    // 展开父节点
+                    let parent = title.parent
+                    while (parent) {
+                        setChildrenVisible(parent, true)
+                        visibleTitles.push(parent)
+                        parent = parent.parent
+                    }
+                    // 折叠其余节点
+                    for (const t of titles) {
+                        if (!visibleTitles.includes(t)) {
+                            setChildrenVisible(t, false)
+                        }
+                    }
+                    return
+                }
+            }
+      },
+      // 设置子节点的可见性
+      setChildrenVisible(title, isVisible) {
+          for (const child of title.children) {
+              child.isVisible = isVisible
+          }
+      },
+      // 滚动到指定的位置
+      scrollToView(scrollTop) {
+          window.scrollTo({ top: scrollTop, behavior: "smooth" })
       }
   }
 }

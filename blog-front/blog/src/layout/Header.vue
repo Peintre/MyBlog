@@ -87,6 +87,11 @@
                             <i class="iconfont iconpinglunzu" /> 留言
                         </router-link>
                     </div> -->
+                    <div class="menus-item">
+                        <a class="menu-btn" @click="openAdmin">
+                            <i class="iconfont iconzhifeiji" /> 后台
+                        </a>
+                    </div>
                     <div class="menus-item" v-if="this.$store.getters.getUserInfo.avatar == null">
                         <a class="menu-btn" @click="openModel">
                             <i class="iconfont icondenglu" /> 登录
@@ -101,7 +106,7 @@
                         />
                         <ul class="menus-submenu">
                             <li>
-                                <router-link to="/personalCenter">
+                                <router-link to="/user">
                                     <i class="iconfont icongerenzhongxin" /> 个人中心
                                 </router-link>
                             </li>
@@ -173,6 +178,9 @@ export default {
         },
         openModel(){
             this.$store.commit('setModelFlag',true)
+        },
+        openAdmin(){
+            window.open("http://47.92.51.50:81/", "_blank")
         },
         logout(){
             //如果在个人中心则跳回上一页

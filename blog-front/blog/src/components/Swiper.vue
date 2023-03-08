@@ -1,5 +1,5 @@
 <template>
-  <router-link to="/talks" class="swiper-container">
+  <router-link to="/talk" class="swiper-container">
     <el-icon size="20" color="#4c4948"><ChatRound /></el-icon>
     <div
       :style="{ height: height * lineNum + 'px' }"
@@ -61,13 +61,13 @@ export default {
   },
   created: function() {
     let _this = this;
-    // setInterval(function() {
-    //   if (_this.num !== _this.list.length) {
-    //     _this.num++;
-    //   } else {
-    //     _this.num = 0;
-    //   }
-    // }, 3000);
+    setInterval(function() {
+      if (_this.num !== _this.list.length) {
+        _this.num++;
+      } else {
+        _this.num = 0;
+      }
+    }, 3000);
   }
 };
 </script>

@@ -1,62 +1,62 @@
 <template>
-  <div>
+  <div class="my-main">
     <!-- banner -->
-    <div class="banner" :style="cover">
-      <h1 class="banner-title">说说</h1>
-    </div>
+    <Banner />
     <!-- 说说内容 -->
-    <v-card class="blog-container">
+    <el-card class="card-content my-talkInfo-container">
       <div class="talk-wrapper">
         <!-- 用户信息 -->
         <div class="user-info-wrapper">
-          <v-avatar size="36" class="user-avatar">
+          <el-avatar size="36" class="user-avatar">
             <img :src="talkInfo.avatar" />
-          </v-avatar>
+          </el-avatar>
           <div class="user-detail-wrapper">
             <div class="user-nickname">
               {{ talkInfo.nickname }}
-              <v-icon class="user-sign" size="20" color="#ffa51e">
-                mdi-check-decagram
-              </v-icon>
+              <el-icon class="user-sign" size="20" color="#ffa51e">
+                <SuccessFilled />
+              </el-icon>
             </div>
             <!-- 发表时间 -->
-            <div class="time">{{ talkInfo.createTime | time }}</div>
+            <div class="time">{{  dataFormat(talkInfo.createTime)}}</div>
             <!-- 说说信息 -->
             <div class="talk-content" v-html="talkInfo.content" />
             <!-- 图片列表 -->
-            <v-row class="talk-images" v-if="talkInfo.imgList">
-              <v-col
+            <el-row class="talk-images" v-if="talkInfo.imgList">
+              <el-col
                 :md="4"
                 :cols="6"
                 v-for="(img, index) of talkInfo.imgList"
                 :key="index"
               >
-                <v-img
+                <el-image
                   class="images-items"
                   :src="img"
                   aspect-ratio="1"
                   max-height="200"
                   @click="previewImg(img)"
                 />
-              </v-col>
-            </v-row>
+              </el-col>
+            </el-row>
             <!-- 说说操作 -->
             <div class="talk-operation">
               <div class="talk-operation-item">
-                <v-icon
+                <el-icon
                   size="16"
                   :color="isLike(talkInfo.id)"
                   class="like-btn"
                   @click.prevent="like(talkInfo)"
                 >
-                  mdi-thumb-up
-                </v-icon>
+                  <StarFilled />
+                </el-icon>
                 <div class="operation-count">
                   {{ talkInfo.likeCount == null ? 0 : talkInfo.likeCount }}
                 </div>
               </div>
               <div class="talk-operation-item">
-                <v-icon size="16" color="#999">mdi-chat</v-icon>
+                <el-icon size="16" color="#999">
+                  <ChatDotSquare />
+                </el-icon>
                 <div class="operation-count">
                   {{ commentCount == null ? 0 : commentCount }}
                 </div>
@@ -66,19 +66,22 @@
         </div>
       </div>
       <!-- 评论 -->
-      <Comment :type="commentType" @getCommentCount="getCommentCount" />
-    </v-card>
+      <!-- <Comment :type="commentType" @getCommentCount="getCommentCount" /> -->
+    </el-card>
   </div>
 </template>
 
 <script>
-import Comment from "../../components/TalkComment";
+import Banner from "@/components/Banner.vue"
+import {praseDateStr} from "@/assets/js/common.js"
+// import Comment from "../../components/TalkComment"
 export default {
   components: {
-    Comment
+    // Comment
+    Banner
   },
   created() {
-    this.getTalkById();
+    this.getTalkById()
   },
   data: function() {
     return {
@@ -86,64 +89,62 @@ export default {
       commentCount: 0,
       talkInfo: {},
       previewList: []
-    };
+    }
   },
   methods: {
     getTalkById() {
+      const this_ = this
       this.axios
-        .get("/api/talks/" + this.$route.params.talkId)
+        .get("/api/talk/blog/getTalk/" + this.$route.params.id)
         .then(({ data }) => {
-          this.talkInfo = data.data;
-          this.previewList = this.talkInfo.imgList;
-        });
+          this_.talkInfo = data.data
+          this_.previewList = this_.talkInfo.imgList
+        })
     },
     getCommentCount(count) {
-      this.commentCount = count;
+      this.commentCount = count
     },
     previewImg(img) {
       this.$imagePreview({
         images: this.previewList,
         index: this.previewList.indexOf(img)
-      });
+      })
     },
     like(talk) {
       // 判断登录
       if (!this.$store.state.userId) {
-        this.$store.state.loginFlag = true;
-        return false;
+        this.$store.state.loginFlag = true
+        return false
       }
       // 发送请求
       this.axios.post("/api/talks/" + talk.id + "/like").then(({ data }) => {
         if (data.flag) {
           // 判断是否点赞
           if (this.$store.state.talkLikeSet.indexOf(talk.id) != -1) {
-            this.$set(talk, "likeCount", talk.likeCount - 1);
+            this.$set(talk, "likeCount", talk.likeCount - 1)
           } else {
-            this.$set(talk, "likeCount", talk.likeCount + 1);
+            this.$set(talk, "likeCount", talk.likeCount + 1)
           }
-          this.$store.commit("talkLike", talk.id);
+          this.$store.commit("talkLike", talk.id)
         }
-      });
+      })
     }
   },
   computed: {
-    cover() {
-      var cover = "";
-      this.$store.state.blogInfo.pageList.forEach(item => {
-        if (item.pageLabel == "talk") {
-          cover = item.pageCover;
-        }
-      });
-      return "background: url(" + cover + ") center center / cover no-repeat";
-    },
     isLike() {
       return function(talkId) {
-        var talkLikeSet = this.$store.state.talkLikeSet;
-        return talkLikeSet.indexOf(talkId) != -1 ? "#eb5055" : "#999";
-      };
+        // var talkLikeSet = this.$store.state.talkLikeSet
+        // return talkLikeSet.indexOf(talkId) != -1 ? "#eb5055" : "#999"
+        return "#eb5055"
+      }
+    },
+    dataFormat(){
+        return function(date){
+            return praseDateStr(date,"YYYY-MM-DD HH:mm:ss")
+        }
     }
   }
-};
+}
 </script>
 
 <style scoped>

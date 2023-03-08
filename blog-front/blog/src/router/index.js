@@ -49,13 +49,28 @@ const routes = [
                 path: '/talk',
                 component: () => import('@/views/talk/Talk.vue'),
             },
+            {
+                path: '/talk/:id',
+                component: () => import('@/views/talk/TalkInfo.vue'),
+            },
+            {
+                path: '/user',
+                component: () => import('@/views/user/User.vue'),
+            },
         ]
     }
 ]
 
 const router = createRouter({
     routes: routes,
-    history: createWebHashHistory()
+    history: createWebHashHistory(),
+    scrollBehavior(to, from, savedPosition) {
+        // 切换路由时始终滚动到顶部
+        if(to.path === from.path){
+            return {}
+        }
+        return { top: 0 }
+    },
 })
 
 
