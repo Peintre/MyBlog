@@ -17,6 +17,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import "@/assets/css/iconfont.css"
 import "@/assets/css/index.css"
 import "@/assets/css/markdown.css"
+import "@/assets/css/mymarkdown.css"
 
 
 const app = createApp(App)

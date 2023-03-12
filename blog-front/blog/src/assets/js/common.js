@@ -1,18 +1,50 @@
-// 时间格式转化函数
 import dayjs from "dayjs"
+import MarkdownIt from 'markdown-it'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/atom-one-dark.css'
+
+// 时间格式转化函数
 export function praseDateStr(data,str){
     str = str || "YYYY-MM-DD HH:mm:ss"
     return dayjs(data).format(str)
 }
 
-//markdown解析器：markdown-it的配置
-import MarkdownIt from 'markdown-it'
-import hljs from 'highlight.js'
-
-
-
+//markdown解析器
 export function markdownToHtml(content){
-    const md = new MarkdownIt()
+    const md = new MarkdownIt({
+        html: true,
+        linkify: true,
+        typographer: true,
+        highlight: function (str, lang) {
+          // 当前时间加随机数生成唯一的id标识
+          const codeIndex = parseInt(Date.now()) + Math.floor(Math.random() * 10000000)
+          //复制按钮
+          let btnHtml = `<div class="copy-btn" data-clipboard-action="copy" data-clipboard-target="#copy${codeIndex}">复制</div>`
+          const linesLength = str.split(/\n/).length - 1
+          // 生成行号
+          let linesNum = '<div aria-hidden="true" class="line-numbers-rows">'
+          for (let index = 1; index < linesLength; index++) {
+            linesNum = linesNum + '<span>'+ index +'</span>'
+          }
+          linesNum += '</div>'
+          if (lang && hljs.getLanguage(lang)) {
+            try {
+                // highlight.js 高亮代码
+                const html = hljs.highlight(lang, str, true).value
+                let langHtml
+                if (linesLength) {
+                  langHtml = '<b class="language-name">' + lang + '</b>'
+                }
+                return `<div class="code-block">${btnHtml}<pre class="hljs"><div id="copy${codeIndex}" class="code-content">${html}</div></pre>${linesNum}${langHtml}</div>`
+            } catch (error) {
+                console.log(error)
+            }
+          }
+          const preCode = md.utils.escapeHtml(str)
+          html = html + preCode
+          return `<pre class="hljs"><code id="copy${codeIndex}">${html}</code>${linesNum}</pre>`
+        }
+      })
     return md.render(content)
 }
 
@@ -84,9 +116,28 @@ export function getCatalog(articleElement){
         let serialNumber = serialNumbers.slice(0, level + 1).join(".")
 
         node.isVisible = node.parent == null
-        node.name = serialNumber + ". " + element.innerText
+        // node.name = serialNumber + ". " + element.innerText
+        node.name = element.innerText
         titles.push(node)
     }
     return titles
+}
+
+/**
+ * 创建代码块
+ */
+export function buildCodeBlock(element) {
+    debugger
+    highlightCode(element)
+    // buildLineNumber(element)
+    // buildCopyButton(element)
+}
+
+//高亮代码块
+function highlightCode(element) {
+    const codeEls = element.querySelectorAll('pre code')
+    codeEls.forEach((el) => {
+        hljs.highlightBlock(el)
+    });
 }
 

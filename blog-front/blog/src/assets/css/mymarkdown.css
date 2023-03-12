@@ -1,0 +1,30 @@
+/* 这是自定义的markdown展示样式 */
+.code-block{
+  position: relative;
+}
+.copy-btn{
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  color: saddlebrown;
+  cursor: pointer;
+}
+.language-name{
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  color: saddlebrown;
+}
+.line-numbers-rows{
+  position:absolute;
+  top:16px;
+  left: 10px;
+  color: saddlebrown;
+}
+.line-numbers-rows span{
+  display: block;
+  user-select: none
+}
+.code-content{
+  padding-left: 10px;
+}
