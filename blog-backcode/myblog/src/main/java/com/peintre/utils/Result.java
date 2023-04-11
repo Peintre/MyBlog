@@ -42,6 +42,10 @@ public class Result<T> {
         return restResult(true, data, SUCCESS.getCode(), message);
     }
 
+    public static <T> Result<T> ok(T data, StatusCode statusCode) {
+        return restResult(true, data, statusCode.getCode(), statusCode.getDesc());
+    }
+
     public static <T> Result<T> fail() {
         return restResult(false, null, FAIL.getCode(), FAIL.getDesc());
     }

@@ -4,10 +4,7 @@ package com.peintre.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.peintre.dto.UserBackDTO;
 import com.peintre.entity.UserAuth;
-import com.peintre.vo.ConditionVo;
-import com.peintre.vo.PageResultVo;
-import com.peintre.vo.PasswordVO;
-import com.peintre.vo.UserVo;
+import com.peintre.vo.*;
 
 /**
  * @Program: MyBlog
@@ -52,5 +49,12 @@ public interface UserAuthService extends IService<UserAuth> {
      * @param user 用户对象
      */
     void updatePassword(UserVo user);
+
+    /**
+     * 用户登录
+     *
+     * @param user 用户信息
+     */
+    void login(UserLoginVo user);
 }
 

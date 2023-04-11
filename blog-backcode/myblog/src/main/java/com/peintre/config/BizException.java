@@ -5,8 +5,7 @@ import com.peintre.enums.StatusCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-
-import static com.peintre.enums.StatusCode.FAIL;
+import static com.peintre.enums.StatusCode.SYSTEM_ERROR;
 
 
 /**
@@ -22,14 +21,20 @@ public class BizException extends RuntimeException {
     /**
      * 错误码
      */
-    private Integer code = FAIL.getCode();
+    private Integer code;
 
     /**
      * 错误信息
      */
-    private final String message;
+    private String message;
+
+    public BizException(){
+        this.message = SYSTEM_ERROR.getDesc();
+        this.code = SYSTEM_ERROR.getCode();
+    }
 
     public BizException(String message) {
+        this.code = SYSTEM_ERROR.getCode();
         this.message = message;
     }
 

@@ -2,13 +2,13 @@ package com.peintre.controller;
 
 
 
+import com.peintre.constant.CommonConst;
 import com.peintre.dto.UserBackDTO;
+import com.peintre.enums.StatusCode;
 import com.peintre.service.UserAuthService;
+import com.peintre.utils.JwtTokenUtil;
 import com.peintre.utils.Result;
-import com.peintre.vo.ConditionVo;
-import com.peintre.vo.PageResultVo;
-import com.peintre.vo.PasswordVO;
-import com.peintre.vo.UserVo;
+import com.peintre.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +31,9 @@ public class UserAuthController{
 
     @Autowired
     private UserAuthService userAuthService;
+
+    @Autowired
+    private JwtTokenUtil jwtUtil;
 
     @ApiOperation(value = "修改管理员密码")
     @PutMapping("/updateAdminPwd")
@@ -65,6 +68,14 @@ public class UserAuthController{
     public Result<?> updatePassword(@Valid @RequestBody UserVo user) {
         userAuthService.updatePassword(user);
         return Result.ok();
+    }
+
+    @ApiOperation(value = "用户登录")
+    @PostMapping("/login")
+    public Result<?> login(@Valid @RequestBody UserLoginVo user) {
+        userAuthService.login(user);
+        String token = jwtUtil.createToken(user.getUsername());
+        return Result.ok(token,StatusCode.LOGIN_SUCCESS);
     }
 }
 

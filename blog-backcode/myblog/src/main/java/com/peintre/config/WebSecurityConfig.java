@@ -1,14 +1,19 @@
 package com.peintre.config;
 
+import com.peintre.filter.TokenHandlerFilter;
 import com.peintre.handler.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * @Program: myblog
@@ -41,6 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MyAccessDeniedHandlerImpl myAccessDeniedHandler;
 
+    @Autowired
+    private TokenHandlerFilter tokenHandlerFilter;
 
     /*配置密码加密*/
     @Bean
@@ -52,6 +60,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public FilterInvocationSecurityMetadataSource securityMetadataSource() {
         return new FilterInvocationSecurityMetadataSourceImpl();
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Bean
@@ -68,7 +82,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
-                .loginProcessingUrl("/login")
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailHandler)
                 .and()
@@ -93,13 +106,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 权限不足处理
                 .accessDeniedHandler(myAccessDeniedHandler)
                 .and()
+                //禁用session
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 .sessionManagement()
                 .maximumSessions(20)
                 .sessionRegistry(sessionRegistry());
-
-
-
-
-
+        http.addFilterBefore(tokenHandlerFilter, UsernamePasswordAuthenticationFilter.class);
     }
+
+
 }

@@ -22,16 +22,16 @@ import com.peintre.service.RedisService;
 import com.peintre.service.UserAuthService;
 import com.peintre.utils.PageUtils;
 import com.peintre.utils.UserUtils;
-import com.peintre.vo.ConditionVo;
-import com.peintre.vo.PageResultVo;
-import com.peintre.vo.PasswordVO;
-import com.peintre.vo.UserVo;
+import com.peintre.vo.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -69,6 +69,9 @@ public class UserAuthServiceImpl extends ServiceImpl<UserAuthDao, UserAuth> impl
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Override
     public void updateAdminPassword(PasswordVO passwordVO) {
@@ -181,6 +184,12 @@ public class UserAuthServiceImpl extends ServiceImpl<UserAuthDao, UserAuth> impl
                 .select(UserAuth::getUsername)
                 .eq(UserAuth::getUsername, user.getUsername()));
         return Objects.nonNull(userAuth);
+    }
+
+    @Override
+    public void login(UserLoginVo user) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+        authenticationManager.authenticate(token);
     }
 }
 
