@@ -37,6 +37,11 @@ public enum StatusCode {
      */
     USER_NO_BLANK(34000, "用户名不能为空！"),
 
+    /**
+     * 用户登录已过期
+     */
+    USER_LOGIN_EXPIRED(35000, "用户登录已过期！"),
+
 
     /**
      * 没有操作权限

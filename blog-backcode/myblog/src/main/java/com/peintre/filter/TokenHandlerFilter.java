@@ -1,5 +1,8 @@
 package com.peintre.filter;
 
+import cn.hutool.core.util.StrUtil;
+import com.peintre.config.BizException;
+import com.peintre.enums.StatusCode;
 import com.peintre.service.serurityImpl.UserDetailsServiceImpl;
 import com.peintre.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -40,21 +45,22 @@ public class TokenHandlerFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //从请求头中获取token
         String token = request.getHeader(tokenHeader);
-        if(token==null || token.equals("")){
-            //TODO 跳转登录界面
-            return;
+        if(token==null || StrUtil.isBlank(tokenHeader)){
+            throw new BizException(StatusCode.NO_LOGIN);
         }
         //token过期处理
         if(jwtUtil.isTokenExpired(token)){
-            //TODO 跳转登录界面
-            return;
+            throw new BizException(StatusCode.USER_LOGIN_EXPIRED);
         }
         //根据token获取用户名
         String username  = jwtUtil.getUsernameFromToken(token);
-        //获取用户信息并设置到security得上下文中后，就不会再去走认证流程
+        //获取用户账号及权限相关信息
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, null);
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        //创建一个新的SecurityContext 实例
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
         filterChain.doFilter(request, response);
     }
 }
