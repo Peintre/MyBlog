@@ -82,6 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
+                .loginProcessingUrl("/login")
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailHandler)
                 .and()
@@ -106,12 +107,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 权限不足处理
                 .accessDeniedHandler(myAccessDeniedHandler)
                 .and()
-                //禁用session
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//                禁用session
                 .sessionManagement()
-                .maximumSessions(20)
-                .sessionRegistry(sessionRegistry());
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//                .sessionManagement()
+//                .maximumSessions(20)
+//                .sessionRegistry(sessionRegistry());
         http.addFilterBefore(tokenHandlerFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

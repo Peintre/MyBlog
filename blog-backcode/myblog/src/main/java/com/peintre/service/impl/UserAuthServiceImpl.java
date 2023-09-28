@@ -185,11 +185,5 @@ public class UserAuthServiceImpl extends ServiceImpl<UserAuthDao, UserAuth> impl
                 .eq(UserAuth::getUsername, user.getUsername()));
         return Objects.nonNull(userAuth);
     }
-
-    @Override
-    public void login(UserLoginVo user) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-        authenticationManager.authenticate(token);
-    }
 }
 

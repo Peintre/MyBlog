@@ -32,9 +32,6 @@ public class UserAuthController{
     @Autowired
     private UserAuthService userAuthService;
 
-    @Autowired
-    private JwtTokenUtil jwtUtil;
-
     @ApiOperation(value = "修改管理员密码")
     @PutMapping("/updateAdminPwd")
     public Result<?> updateAdminPassword(@Valid @RequestBody PasswordVO passwordVO) {
@@ -68,14 +65,6 @@ public class UserAuthController{
     public Result<?> updatePassword(@Valid @RequestBody UserVo user) {
         userAuthService.updatePassword(user);
         return Result.ok();
-    }
-
-    @ApiOperation(value = "用户登录")
-    @PostMapping("/login")
-    public Result<?> login(@Valid @RequestBody UserLoginVo user) {
-        userAuthService.login(user);
-        String token = jwtUtil.createToken(user.getUsername());
-        return Result.ok(token,StatusCode.LOGIN_SUCCESS);
     }
 }
 

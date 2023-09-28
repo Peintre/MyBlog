@@ -49,12 +49,5 @@ public interface UserAuthService extends IService<UserAuth> {
      * @param user 用户对象
      */
     void updatePassword(UserVo user);
-
-    /**
-     * 用户登录
-     *
-     * @param user 用户信息
-     */
-    void login(UserLoginVo user);
 }
 
