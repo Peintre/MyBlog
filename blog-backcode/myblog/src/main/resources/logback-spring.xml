@@ -108,6 +108,5 @@
     </root>
 
     <!--开发环境:打印控制台-->
-    <logger name="com.yb.audit.mapper" level="DEBUG"/>
-    <logger name="com.yb.analysis.mapper" level="DEBUG"/>
+    <logger name="com.peintre.dao" level="DEBUG"/>
 </configuration>
