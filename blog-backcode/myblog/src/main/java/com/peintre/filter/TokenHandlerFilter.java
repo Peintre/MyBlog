@@ -43,9 +43,15 @@ public class TokenHandlerFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        //获取请求路径
+        String path = request.getServletPath();
         //从请求头中获取token
         String token = request.getHeader(tokenHeader);
         if(token==null || StrUtil.isBlank(tokenHeader)){
+            if("/login".equals(path)){
+                filterChain.doFilter(request, response);
+                return;
+            }
             throw new BizException(StatusCode.NO_LOGIN);
         }
         //token过期处理
